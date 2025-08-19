@@ -16,6 +16,7 @@ import PaymentFailed from './components/pages/Payment-failed';
 import OrderSuccess from './components/pages/OrderSuccess';
 import MyOrders from './components/pages/MyOrder';
 import Profile from './components/pages/Profile';
+import ProductDetails from './components/pages/ProductDetails';
 
 export default function App() {
   const { token } = useAuth();
@@ -36,6 +37,7 @@ export default function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/product/:id" element={<ProductDetails />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/admin/add-product" element={<PrivateRoute><AdminAddProduct /></PrivateRoute>} />
                 <Route path="/my-orders" element={<PrivateRoute><MyOrders /></PrivateRoute>} />

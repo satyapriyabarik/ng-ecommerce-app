@@ -46,4 +46,7 @@ export class Order {
 
     @Field(() => [OrderItem])
     items!: OrderItem[];
+
+    @Field({ nullable: true })
+    imageUrl?: string;
 }

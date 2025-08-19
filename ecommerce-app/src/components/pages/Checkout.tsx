@@ -66,7 +66,10 @@ export default function Checkout() {
                             > <h5 className="m-3">{item.product?.title}</h5>
                                 <div className="d-flex align-items-center">
                                     <p className="m-3">₹{item.product?.price?.toFixed(2)}</p>
-                                    <p><img src={item.product?.imageUrl} alt={item.product?.title} className="img-fluid m-3" style={{ maxWidth: '100px' }} /></p>
+                                    <Link to={`/product/${item.product._id}`} className="text-decoration-none">
+                                        <img src={item.product?.imageUrl} alt={item.product?.title} className="img-fluid m-3" style={{ width: '100px', height: "100px" }} />
+
+                                    </Link>
                                     <div className="d-flex align-items-center">
                                         <button
                                             className="btn btn-sm btn-outline-secondary me-2"

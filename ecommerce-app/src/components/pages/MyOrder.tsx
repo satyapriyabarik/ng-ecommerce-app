@@ -36,6 +36,12 @@ export default function MyOrders() {
                                         className="list-group-item d-flex justify-content-between align-items-center"
                                     >
                                         <div>
+                                            <img
+                                                src={item.product.imageUrl}
+                                                alt={item.product.title}
+                                                className="img-thumbnail me-2"
+                                                style={{ width: "50px", height: "50px" }}
+                                            />
                                             <h6 className="mb-0">{item.product?.title}</h6>
                                             <small>₹{item.product?.price?.toFixed(2)} x {item.quantity}</small>
                                         </div>

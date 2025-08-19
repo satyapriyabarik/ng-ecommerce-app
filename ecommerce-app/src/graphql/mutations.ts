@@ -1,6 +1,19 @@
 import { gql } from "@apollo/client";
 
 const PRODUCTS_QUERY = gql`query { getProducts { _id title price imageUrl, category, descriptions } }`;
+const PRODUCT_QUERY = gql`
+  query Product($id: String!) {
+    product(id: $id) {
+      _id
+      title
+      descriptions
+      price
+      category
+      stock
+      imageUrl
+    }
+  }
+`;
 const LOGIN_MUTATION = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -106,6 +119,7 @@ const GET_MY_ORDERS = gql`
           _id
           title
           price
+          imageUrl
         }
         quantity
       }
@@ -126,5 +140,14 @@ const ME_QUERY = gql`
     }
   }
 `;
-
-export { PRODUCTS_QUERY, LOGIN_MUTATION, REGISTER_MUTATION, CREATE_RAZORPAY_ORDER, CREATE_PRODUCT, CREATE_PAYMENT_LINK, VERIFY_PAYMENT, PLACE_ORDER_MUTATION, ADD_TO_CART, GET_CART, UPDATE_CART_QUANTITY, REMOVE_FROM_CART, CLEAR_CART, GET_MY_ORDERS, ME_QUERY };
+const SEARCH_PRODUCTS = gql`
+query SearchProducts($keyword: String!) {
+  searchProducts(keyword: $keyword) {
+   _id
+    title
+    imageUrl
+    price
+  }
+}
+`;
+export { PRODUCTS_QUERY, PRODUCT_QUERY, LOGIN_MUTATION, REGISTER_MUTATION, CREATE_RAZORPAY_ORDER, CREATE_PRODUCT, CREATE_PAYMENT_LINK, VERIFY_PAYMENT, PLACE_ORDER_MUTATION, ADD_TO_CART, GET_CART, UPDATE_CART_QUANTITY, REMOVE_FROM_CART, CLEAR_CART, GET_MY_ORDERS, ME_QUERY, SEARCH_PRODUCTS };

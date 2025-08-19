@@ -21,6 +21,10 @@ export class ProductResolver {
             return { ...plainProduct, _id: plainProduct._id.toString(), imageUrl: plainProduct.imageUrl ?? '' } as Product;
         });
     }
+    @Query(() => Product, { nullable: true })
+    async product(@Arg("id") id: string) {
+        return await ProductModel.findById(id);
+    }
 
     @Mutation(() => Product)
     async createProduct(
@@ -40,5 +44,17 @@ export class ProductResolver {
         await product.save();
         const plainProduct = product.toObject();
         return { ...plainProduct, _id: plainProduct._id.toString(), imageUrl: plainProduct.imageUrl ?? '' } as Product;
+    }
+    @Query(() => [Product])
+    async searchProducts(
+        @Arg("keyword", () => String) keyword: string
+    ): Promise<Product[]> {
+        const products = await ProductModel.find({
+            title: { $regex: keyword, $options: "i" }, // case-insensitive search
+        }).limit(10);
+        return products.map(product => {
+            const plainProduct = product.toObject();
+            return { ...plainProduct, _id: plainProduct._id.toString(), imageUrl: plainProduct.imageUrl ?? '' } as Product;
+        });
     }
 }

@@ -18,7 +18,7 @@ export class Product {
     price!: number;
 
     @Field()
-    inStock!: boolean;
+    stock!: number;
 
     @Field()
     category!: string;

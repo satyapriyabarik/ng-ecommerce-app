@@ -1,7 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useCart } from '../../context/CartContext';
-import { FaAddressCard, FaListAlt, FaLock, FaPlusCircle, FaSearch, FaShoppingCart, FaSignOutAlt, FaUser } from 'react-icons/fa';
-import { useAuth } from '../../context/AuthContext';
+
+import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
+import { FaAddressCard, FaListAlt, FaLock, FaPlusCircle, FaSearch, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { TiShoppingCart } from "react-icons/ti";
+import { BiCart, BiSolidCartAdd } from "react-icons/bi";
+import { useAuth } from "../../context/AuthContext";
+import { useLazyQuery } from "@apollo/client";
+import { SEARCH_PRODUCTS } from "../../graphql/mutations";
+import { useState, useEffect, useRef } from "react";
 
 function Header() {
     const { cart = [] } = useCart();
@@ -11,101 +17,147 @@ function Header() {
     const { token, user, logout } = useAuth();
     const navigate = useNavigate();
 
+    const [keyword, setKeyword] = useState("");
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [searchProducts, { data }] = useLazyQuery(SEARCH_PRODUCTS);
+
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (keyword.length > 1) {
+            searchProducts({ variables: { keyword } });
+            setShowSuggestions(true);
+        } else {
+            setShowSuggestions(false);
+        }
+    }, [keyword]);
+
+    // close suggestions when clicking outside
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+                setShowSuggestions(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
     const handleLogout = () => {
         logout();
+        navigate("/");
+        window.location.reload();
+        sessionStorage.clear();
+    };
 
-        navigate('/'); // Redirect after logout
-        window.location.reload(); // Reload to reset state
-        sessionStorage.clear(); // Clear session storage
-    };
     const handleAddItem = () => {
-        navigate('/admin/add-product'); // Redirect to add product page
+        navigate("/admin/add-product");
     };
+
+    const handleSelect = (id: string) => {
+        setKeyword("");
+        setShowSuggestions(false);
+        navigate(`/product/${id}`);
+    };
+
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-            <div className='container'>
-                <h2 className="col-lg-2"><Link className="navbar-brand" to={token ? "/home" : "/login"}><FaShoppingCart className="logo animate_animate animate__rubberBand" />NGKart</Link>
+            <div className="container d-flex align-items-center justify-content-between">
+                {/* Logo */}
+                <h2 className="m-0">
+                    <Link className="navbar-brand" to={token ? "/home" : "/login"}>
+                        <TiShoppingCart size="2em" className="logo animate_animate animate__rubberBand" /> NGKart
+                    </Link>
                 </h2>
-                <div className="col-lg-7 text-end">
-                    <form className="d-flex ms-auto me-3">
-                        <input
-                            className="form-control me-2"
-                            type="search"
-                            placeholder="Search products..."
-                            aria-label="Search"
-                        />
-                        <button className="btn btn-outline-light" type="submit">
-                            <FaSearch />
-                        </button>
-                    </form>
 
+                {/* Search Box */}
+                <div className="position-relative flex-grow-1 mx-3" ref={wrapperRef}>
+                    <input
+                        className="form-control"
+                        type="search"
+                        placeholder="Search products..."
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                    />
+                    <FaSearch className="position-absolute top-50 end-0 translate-middle-y me-3 text-muted" />
+
+                    {showSuggestions && data?.searchProducts?.length > 0 && (
+                        <ul className="list-group position-absolute w-100 mt-1 shadow">
+                            {data.searchProducts.map((p: any) => (
+                                <li
+                                    key={p._id}
+                                    className="list-group-item list-group-item-action d-flex align-items-center"
+                                    onClick={() => handleSelect(p._id)}
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    <img src={p.imageUrl} alt={p.title} width="40" className="me-2 rounded" />
+                                    <div>
+                                        <strong>{p.title}</strong>
+                                        <div className="text-muted small">₹{p.price}</div>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
 
-                <div className="col-lg-3 text-end">
+                {/* Cart + User */}
+                <div className="d-flex align-items-center">
+                    {/* Cart */}
+                    <Link to="/checkout" className="btn btn-outline-light position-relative me-3">
+                        {totalItems > 0 ? <BiSolidCartAdd /> : <BiCart />}
+                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {totalItems}
+                        </span>
+                    </Link>
 
-                    <ul className="navbar-nav mb-2 mb-lg-0">
-                        {/* Cart Link */}
-                        <li className="nav-item">
-                            <Link to="/checkout" className="btn btn-outline-light position-relative">
-                                <FaShoppingCart />
-                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {totalItems}
-                                </span>
-                            </Link>
-                        </li>
-
-                        {/* If user is logged in */}
-                        {user ? (
-                            <li className="nav-item dropdown">
-                                <a
-                                    className="nav-link dropdown-toggle"
-                                    href="#"
-                                    id="userDropdown"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                >
-                                    <FaUser /> {user.fullName}
-                                </a>
-                                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    {/* User Menu */}
+                    {user ? (
+                        <div className="dropdown">
+                            <button
+                                className="btn btn-outline-light dropdown-toggle"
+                                id="userDropdown"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                <FaUser /> {user.fullName}
+                            </button>
+                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    <Link className="dropdown-item" to="/profile">
+                                        <FaAddressCard /> Profile
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link className="dropdown-item" to="/my-orders">
+                                        <FaListAlt /> My Orders
+                                    </Link>
+                                </li>
+                                <li><hr className="dropdown-divider" /></li>
+                                {token && user.role === "ADMIN" && (
                                     <li>
-                                        <Link className="dropdown-item" to="/profile">
-                                            <FaAddressCard /> Profile
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link className="dropdown-item" to="/my-orders">
-                                            <FaListAlt /> My Orders
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <hr className="dropdown-divider" />
-                                    </li>
-                                    <li>{token && user.role === 'ADMIN' ? (
-                                        <button className="btn btn-default  m-1" onClick={handleAddItem}><FaPlusCircle /> Add Product</button>
-                                    ) : (
-                                        <></>
-                                    )}</li>
-                                    <li>
-                                        <button className="dropdown-item" onClick={handleLogout}>
-                                            <FaSignOutAlt /> Logout
+                                        <button className="dropdown-item" onClick={handleAddItem}>
+                                            <FaPlusCircle /> Add Product
                                         </button>
                                     </li>
-                                </ul>
-                            </li>
-                        ) : (
-                            <li className="nav-item text-end">
-                                <Link className="nav-link border-round ml-2" to="/login">
-                                    <FaLock /> Login
-                                </Link>
-                            </li>
-                        )}
-                    </ul>
+                                )}
+                                <li>
+                                    <button className="dropdown-item" onClick={handleLogout}>
+                                        <FaSignOutAlt /> Logout
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    ) : (
+                        <Link className="btn btn-outline-light" to="/login">
+                            <FaLock /> Login
+                        </Link>
+                    )}
                 </div>
             </div>
-
         </nav>
     );
 }
 
 export default Header;
+
