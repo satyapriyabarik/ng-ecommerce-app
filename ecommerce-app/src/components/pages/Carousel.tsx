@@ -5,21 +5,21 @@ const Carousel = () => {
         <div id="productCarousel" className="carousel slide" data-bs-ride="carousel">
             <div className="carousel-inner">
                 <div className="carousel-item active">
-                    <img src="src/assets/images/slide-1.jpeg" className="d-block w-100" alt="Slide 1" />
+                    <img src="https://spb1-personal-bucket.s3.ap-south-1.amazonaws.com/slide-1.jpeg" className="d-block w-100" alt="Slide 1" />
                     <div className="carousel-caption d-none d-md-block">
                         <h3 className="animate__animated animate__fadeInDown animate__flip">Welcome to Our Store</h3>
                         <p className="animate__animated animate__fadeInUp">Best products at unbeatable prices</p>
                     </div>
                 </div>
                 <div className="carousel-item">
-                    <img src="src/assets/images/slide-2.jpg" className="d-block w-100" alt="Slide 2" />
+                    <img src="https://spb1-personal-bucket.s3.ap-south-1.amazonaws.com/slide-2.jpg" className="d-block w-100" alt="Slide 2" />
                     <div className="carousel-caption d-none d-md-block">
                         <h3 className="animate__animated animate__fadeInDown">Welcome to Our Store</h3>
                         <p className="animate__animated animate__fadeInUp">Best products at unbeatable prices</p>
                     </div>
                 </div>
                 <div className="carousel-item">
-                    <img src="src/assets/images/slide-3.jpg" className="d-block w-100" alt="Slide 3" />
+                    <img src="https://spb1-personal-bucket.s3.ap-south-1.amazonaws.com/slide-3.jpg" className="d-block w-100" alt="Slide 3" />
                     <div className="carousel-caption d-none d-md-block">
                         <h3 className="animate__animated animate__fadeInDown">Welcome to Our Store</h3>
                         <p className="animate__animated animate__fadeInUp">Best products at unbeatable prices</p>

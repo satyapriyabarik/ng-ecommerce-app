@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Arg, Int } from 'type-graphql';
-import { ProductModel } from '../models/Product';
-import { Product } from '../schema/Product';
+import { ProductModel } from '../models/Product.js';
+import { Product } from '../schema/Product.js';
 
 @Resolver()
 export class ProductResolver {

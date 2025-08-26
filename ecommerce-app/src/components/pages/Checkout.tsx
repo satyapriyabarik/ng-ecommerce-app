@@ -62,20 +62,32 @@ export default function Checkout() {
                         {cart.map((item) => (
                             <li
                                 key={item.product._id}
-                                className="list-group-item d-flex justify-content-between align-items-center"
-                            > <h5 className="m-3">{item.product?.title}</h5>
-                                <div className="d-flex align-items-center">
-                                    <p className="m-3">₹{item.product?.price?.toFixed(2)}</p>
-                                    <Link to={`/product/${item.product._id}`} className="text-decoration-none">
-                                        <img src={item.product?.imageUrl} alt={item.product?.title} className="img-fluid m-3" style={{ width: '100px', height: "100px" }} />
+                                className="list-group-item"
+                            >
+                                <div className="row align-items-center">
+                                    {/* Product Image */}
+                                    <div className="col-4 col-md-2 text-center mb-2 mb-md-0">
+                                        <Link to={`/product/${item.product._id}`} className="text-decoration-none">
+                                            <img
+                                                src={item.product?.imageUrl}
+                                                alt={item.product?.title}
+                                                className="img-fluid rounded"
+                                                style={{ maxHeight: "100px" }}
+                                            />
+                                        </Link>
+                                    </div>
 
-                                    </Link>
-                                    <div className="d-flex align-items-center">
+                                    {/* Title + Price */}
+                                    <div className="col-8 col-md-4">
+                                        <h6 className="mb-1">{item.product?.title}</h6>
+                                        <p className="mb-0 text-muted">₹{item.product?.price?.toFixed(2)}</p>
+                                    </div>
+
+                                    {/* Quantity Controls */}
+                                    <div className="col-6 col-md-3 d-flex align-items-center mt-2 mt-md-0">
                                         <button
                                             className="btn btn-sm btn-outline-secondary me-2"
-                                            onClick={() =>
-                                                updateCart(item.product._id, Math.max(item.quantity - 1, 1))
-                                            }
+                                            onClick={() => updateCart(item.product._id, Math.max(item.quantity - 1, 1))}
                                         >
                                             -
                                         </button>
@@ -87,31 +99,39 @@ export default function Checkout() {
                                             +
                                         </button>
                                     </div>
-                                </div>
-                                <div>
-                                    <strong>
-                                        ₹{(item.product?.price || 0) * item.quantity}
-                                    </strong>
-                                    <button
-                                        className="btn btn-sm btn-danger ms-3"
-                                        onClick={() => removeFromCart(item.product._id)}
-                                    ><FaTrashAlt />
 
-                                    </button>
+                                    {/* Total + Remove */}
+                                    <div className="col-6 col-md-3 d-flex align-items-center justify-content-between mt-2 mt-md-0">
+                                        <strong>₹{(item.product?.price || 0) * item.quantity}</strong>
+                                        <button
+                                            className="btn btn-sm btn-danger ms-2"
+                                            onClick={() => removeFromCart(item.product._id)}
+                                        >
+                                            <FaTrashAlt />
+                                        </button>
+                                    </div>
                                 </div>
                             </li>
                         ))}
                     </ul>
 
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                        <h4>Total:  ₹{total.toFixed(2)}</h4>
-                        <div>
-                            <button className="btn btn-warning me-2" onClick={clearCart}>
+                    <div className="row align-items-center mb-3 text-center text-md-start">
+                        {/* Total */}
+                        <div className="col-12 col-md-6 mb-2 mb-md-0">
+                            <h4 className="mb-0">Total: ₹{total.toFixed(2)}</h4>
+                        </div>
+
+                        {/* Buttons */}
+                        <div className="col-12 col-md-6 d-flex flex-column flex-md-row justify-content-md-end">
+                            <button className="btn btn-warning me-md-2 mb-2 mb-md-0" onClick={clearCart}>
                                 Clear Cart
                             </button>
-                            <button className="btn btn-success" onClick={handlePayment}>Proceed to Payment</button>
+                            <button className="btn btn-success" onClick={handlePayment}>
+                                Proceed to Payment
+                            </button>
                         </div>
                     </div>
+
                 </>
             )}
         </div>

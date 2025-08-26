@@ -1,0 +1,13 @@
+container_commands:
+  01_make_ts_node_dev_executable:
+    command: "chmod +x /var/app/current/node_modules/.bin/ts-node-dev"
+    leader_only: true
+
+option_settings:
+  aws:elasticbeanstalk:container:nodejs:
+    NodeCommand: "npm start"
+
+  aws:elasticbeanstalk:cloudwatch:logs:
+    StreamLogs: true
+    DeleteOnTerminate: true
+    RetentionInDays: 14

@@ -1,10 +1,10 @@
 import { Resolver, Mutation, Arg, UseMiddleware, Ctx, Query } from 'type-graphql';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { UserModel } from '../models/User';
-import { LoginResponse, User } from '../schema/User';
+import { UserModel } from '../models/User.js';
+import { LoginResponse, User } from '../schema/User.js';
 import { plainToInstance } from 'class-transformer';
-import { AuthMiddleware } from '../middleware/auth';
+import { AuthMiddleware } from '../middleware/auth.js';
 const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
 
 @Resolver()

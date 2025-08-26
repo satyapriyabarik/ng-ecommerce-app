@@ -2,7 +2,7 @@ import { Resolver, Mutation, Arg } from 'type-graphql';
 import shortid from 'shortid';
 import { razorpay } from '../utils/razorpay';
 import Razorpay from 'razorpay';
-import { PaymentLinkResponse, RazorpayOrderResponse } from '../schema/Payment';
+import { PaymentLinkResponse, RazorpayOrderResponse } from '../schema/Payment.js';
 import crypto from "crypto";
 
 @Resolver()

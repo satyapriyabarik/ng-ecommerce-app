@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Arg, Query, Ctx, Int } from "type-graphql";
-import { CartModel } from "../models/Cart";
-import { ProductModel } from "../models/Product";
-import { CartItemResponse } from "../schema/CartItem"; // DTO
+import { CartModel } from "../models/Cart.js";
+import { ProductModel } from "../models/Product.js";
+import { CartItemResponse } from "../schema/CartItem.js"; // DTO
 import { ObjectId } from "mongodb";
 
 @Resolver()

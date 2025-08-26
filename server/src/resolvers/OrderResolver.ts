@@ -1,8 +1,8 @@
 import { Resolver, Mutation, UseMiddleware, Ctx, Arg, Query } from "type-graphql";
-import { AuthMiddleware } from "../middleware/auth";
-import { CartModel } from "../models/Cart";
-import { OrderModel } from "../models/Order";
-import { Order } from "../schema/Order";
+import { AuthMiddleware } from "../middleware/auth.js";
+import { CartModel } from "../models/Cart.js";
+import { OrderModel } from "../models/Order.js";
+import { Order } from "../schema/Order.js";
 @Resolver()
 export class OrderResolver {
     @Mutation(() => Boolean)
