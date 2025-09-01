@@ -77,7 +77,7 @@ function Header() {
                 <div className="d-flex w-100 align-items-center justify-content-between">
                     {/* Logo */}
                     <h2 className="m-0">
-                        <Link className="navbar-brand d-flex align-items-center" to={token ? "/home" : "/login"}>
+                        <Link className="navbar-brand d-flex align-items-center" to={"/home"}>
                             <TiShoppingCart size="2em" className="logo animate_animate animate__rubberBand me-2" />
                             NGKart
                         </Link>

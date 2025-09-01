@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { REGISTER_MUTATION } from '../../graphql/mutations';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -10,14 +11,23 @@ const Register = () => {
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
     const [doRegister] = useMutation(REGISTER_MUTATION);
-
+    const navigate = useNavigate();
     return (
         <div className="container mt-5" style={{ maxWidth: '400px' }}>
             <h4>Register</h4>
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
-                    doRegister({ variables: { email, password, fullName, address, phone, role } });
+                    doRegister({
+                        variables: { email, password, fullName, address, phone, role }
+                    }).then(() => {
+                        alert('Registration successful! Please log in.');
+                        navigate('/login');
+                    }).catch(err => {
+                        alert('Registration failed: ' + err.message);
+                    });
+
+
                 }}
             >
                 <input
